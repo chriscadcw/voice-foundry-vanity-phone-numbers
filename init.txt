@@ -1,0 +1,4 @@
+#initial commit file
+/**
+ * Used to initiate repo on CodeCommit to set up branches
+ */
