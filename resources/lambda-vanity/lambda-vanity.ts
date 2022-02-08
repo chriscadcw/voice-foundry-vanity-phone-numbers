@@ -17,6 +17,8 @@ const words:string[] = require('an-array-of-english-words');
 /**
  * Function name: validateNumber
  * @param number string
+ *
+ * @return string
  * 
  * Inside the function:
  * 1. Validates that the number can be processed
@@ -42,7 +44,11 @@ const validateNumber = (number: string): string => {
 /**
  * Function name: processPhoneNumber
  * @param phoneNumber string
- * @returns 
+ *
+ * @return string
+ *
+ * Inside the function:
+ * 1. Strips the country code or leading '1' off of the phone number and returns the remaining 10-digit number.
  */
 const processPhoneNumber = (phoneNumber: string): string => {
     // The regex to use to separate the country code from the rest of the phone number

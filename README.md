@@ -34,7 +34,7 @@ This project creates a deployable AWS CloudFormation template that does the foll
    4. Once on the AWS Connect Dashboard, navigate to `Routing > Contact Flows`
    5. Click the `Create Contact Flow` button
    6. From the dropdown on the right-hand side, choose `Import Flow`
-   7. Click `Show All Files` and navigate to the folder you unzipped the project into and select the `VanityPhoneNumbersConnectTemplate` file and click `Open`
+   7. Click `Show All Files` and navigate to the folder you unzipped the project into and select the `VanityPhoneNumbersContactTemplate` file and click `Open`
    8. Click `Save` and then `Publish` to make the new Contact Flow available in your AWS Connect instance
    9. To assign the new Contact Flow to a particular phone number, navigate to `Routing > Phone numbers` and click on the phone number you would like to attach it to.
    10. From the `Contact flow / IVR` dropdown, choose `VanityPhoneNumbers` and click `Save`, the new Contact Flow is now assigned to that phone number  
