@@ -18,12 +18,13 @@ This project creates a deployable AWS CloudFormation template that does the foll
 * Create a DynamoDB database to store vanity phone number matches that it finds
 * Grants the lambda role access to perform read/write operations on the table
 
-# Other Notes
+# Installation Notes
 * The lambda-vanity.zip file contains the script at resources/lambda-vanity/lambda-vanity.js
 * Tests are included for the stack as well as the lambda function that can be invoked by running `npm run test`
 * The included cdk stack can be deployed by running the following commands
     - `cdk bootstrap`
     - `cdk deploy`
+* After deployment, the Lambda function will have to imported into the Connect Contact Flow
 
 # Future Options
 * With more time and a better understanding of the AWS CDK in relation to AWS Connect
