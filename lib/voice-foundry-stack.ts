@@ -10,11 +10,13 @@ export class VoiceFoundryStack extends Stack {
     super(scope, id, props);
 
     const lambdaRole = new iam.Role(this, "VanityLambdaExecutionRole", {
-         assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-         description: 'Service execution role used by lambda for VanityNumbersFunction'
+      roleName: "VanityLambdaExecutionRole",
+      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+      description: 'Service execution role used by lambda for VanityNumbersFunction'
     });
 
     const table = new dynamodb.Table(this, 'vanity_numbers', {
+      tableName: 'vanity_numbers',
       partitionKey: { name: 'phone_number', type: dynamodb.AttributeType.STRING },
       removalPolicy: cdk.RemovalPolicy.DESTROY
     });
@@ -22,6 +24,7 @@ export class VoiceFoundryStack extends Stack {
     table.grantReadWriteData(lambdaRole);
 
     const lambadaFunction  = new lambda.Function(this, "VanityNumbersFunction", {
+      functionName: 'vanityPhoneNumberFunction',
       code: lambda.Code.fromAsset('resources/lambda-vanity/lambda-vanity.zip'),
       handler: 'vanityPhoneNumberHandler',
       runtime: lambda.Runtime.NODEJS_14_X,
