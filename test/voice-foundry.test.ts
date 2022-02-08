@@ -9,9 +9,7 @@ test('DynamoDB Table Resource Created', () => {
     // THEN
    const template = Template.fromStack(stack);
 
-   template.hasResourceProperties('AWS::DynamoDB::Table', {
-     VisibilityTimeout: 300
-   });
+   template.hasResourceProperties('AWS::DynamoDB::Table', {});
 });
 
 test('Role for Lambda created', () => {
@@ -21,7 +19,15 @@ test('Role for Lambda created', () => {
 
     const template = Template.fromStack(stack);
 
-    template.hasResourceProperties('AWS::Iam::Role', {
-        VisiblityTimeout: 300
-    })
+    template.hasResourceProperties('AWS::IAM::Role', {});
+});
+
+test('Policy for Lambda Role created', () => {
+    const app = new cdk.App();
+
+    const stack = new VoiceFoundry.VoiceFoundryStack(app, 'MyTestStack');
+
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties('AWS::IAM::Policy', {});
 });

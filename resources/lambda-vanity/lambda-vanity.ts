@@ -202,16 +202,14 @@ const generateVanityPhoneNumbers = async (number: string, ddb: DynamoDBDocumentC
                 }
             }
         }
-    }
-
+    }    
     // If there were no combinations found using the full seven digit string,
     // We'll attempt a search based on just the last four instead
-    if( vanityList.length == 0 ) { // The default list length of nonsense combinations is 7                
-
+    if( vanityList.length == 0 ) { // The default list length of nonsense combinations is 7                        
         // Pulls the first six digits from the phone number
         const firstSix = number.slice(0,6);
         // Pulls only the last four digits from the phone number
-        const lastFour = number.slice(6).split('');
+        const lastFour = number.slice(6).split('');        
 
         const retrySpotOneStr = letterMap.get(lastFour[0])?.split('') ;
         const retrySpotTwoStr = letterMap.get(lastFour[1])?.split('');
@@ -247,10 +245,10 @@ const generateVanityPhoneNumbers = async (number: string, ddb: DynamoDBDocumentC
                         if( vanityList.length >= 5 ){
                             break;
                         }
-                        const phoneWord = retrySpotOneStr[i] + retrySpotTwoStr[j] + retrySpotThreeStr[k] + retrySpotFourStr[m];
-                        const vanityNumber = firstSix + phoneWord;
+                        const phoneWord = retrySpotOneStr[i] + retrySpotTwoStr[j] + retrySpotThreeStr[k] + retrySpotFourStr[m];                        
+                        const vanityNumber = firstSix + phoneWord;                        
                         // If the vanity word created by the last four digits is in the words list, add it to the vanity list
-                        if( words.includes(phoneWord) ){
+                        if( words.includes(phoneWord.toLowerCase()) ){
                             vanityList.push(vanityNumber);
                         }
 
@@ -260,12 +258,9 @@ const generateVanityPhoneNumbers = async (number: string, ddb: DynamoDBDocumentC
         }
     }
     
-    if( vanityList.length > 0 ){
-        console.log('Generated vanity numbers! Saving to db: ' + vanityList);
+    if( vanityList.length > 0 ){        
         await save(number, vanityList, ddb);
-    } else {
-        vanityList.push("We're sorry, there were no vanity numbers that matched your phone number.")
-    }
+    } 
 
     return vanityList;
   
@@ -297,12 +292,10 @@ const checkDatabase = async (number: string, ddb: DynamoDBDocumentClient): Promi
    
     try {
         const result = await ddb.send(new GetCommand(params));
-        if( result.Item?.vanity_numbers != undefined ){
-            console.log('Found vanity numbers in db: ' + result.Item.vanity_numbers);
+        if( result.Item?.vanity_numbers != undefined ){            
             results = result.Item?.vanity_numbers;
         }
-    } catch(err){
-        console.error(err);  
+    } catch(err){        
         throw new Error("Encountered an error while trying to request existing records: " + err);
     } 
 
@@ -338,10 +331,12 @@ export const vanityPhoneNumberHandler = async ( event: ConnectContactFlowEvent, 
 
         const result: ConnectContactFlowResult = {};
 
-        const finalVanityList = vanityList.slice(-3); // We're only returning the last 5 matches to the user
+        if( vanityList.length > 0 ){
+            const finalVanityList = vanityList.slice(-3); // We're only returning the last 3 matches to the user
         
-        for ( let i = 0; i < finalVanityList.length; i++ ){
-            result['number' + i] = finalVanityList[i].replace(/(.)/g, '$&, ');
+            for ( let i = 0; i < finalVanityList.length; i++ ){
+                result['number' + i] = finalVanityList[i].replace(/(.)/g, '$&, ');
+            }
         }
 
         let status = '';
@@ -350,13 +345,10 @@ export const vanityPhoneNumberHandler = async ( event: ConnectContactFlowEvent, 
         } else {
             status = 'No matches found.';
         }
-        callback(null, result);        
-        console.log(status);
+        callback(null, result);                
         return status;
     } catch (err){
-        const status = 'Failure!';
-        console.log(status);
-        console.log(err);        
+        const status = 'Failure!';        
         callback(err as Error);
         return status;
     }
